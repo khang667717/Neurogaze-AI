@@ -1,0 +1,578 @@
+/* Premium Dark-Mode Glassmorphism Styling for SRVAS */
+
+:root {
+    /* Color Palette */
+    --bg-base: hsl(222, 25%, 6%);
+    --accent-blue: hsl(215, 100%, 60%);
+    --accent-blue-glow: hsla(215, 100%, 60%, 0.3);
+    
+    --success: hsl(145, 80%, 50%);
+    --success-glow: hsla(145, 80%, 50%, 0.4);
+    
+    --warning: hsl(35, 90%, 55%);
+    --warning-glow: hsla(35, 90%, 55%, 0.4);
+    
+    --danger: hsl(355, 85%, 55%);
+    --danger-glow: hsla(355, 85%, 55%, 0.4);
+
+    --card-bg: hsla(222, 20%, 11%, 0.55);
+    --card-border: hsla(0, 0%, 100%, 0.08);
+    
+    /* Typography */
+    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-base);
+    color: hsl(0, 0%, 92%);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Atmospheric Ambient Glows */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    background: 
+        radial-gradient(circle at 15% 15%, hsla(215, 100%, 50%, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, hsla(280, 100%, 50%, 0.06) 0%, transparent 45%);
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+/* Header Area */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.06);
+    padding-bottom: 20px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-blue), hsl(195, 100%, 50%));
+    color: #fff;
+    box-shadow: 0 0 20px hsla(215, 100%, 60%, 0.4);
+}
+
+.logo-icon i {
+    width: 22px;
+    height: 22px;
+}
+
+.title-meta h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(120deg, #fff, hsl(215, 100%, 85%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    font-size: 0.85rem;
+    color: hsl(222, 10%, 65%);
+    font-weight: 400;
+}
+
+/* Connection Status Panel */
+.status-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: hsla(0, 0%, 100%, 0.03);
+    border: 1px solid hsla(0, 0%, 100%, 0.06);
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: hsl(0, 0%, 80%);
+}
+
+.status-glow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--warning);
+    box-shadow: 0 0 8px var(--warning);
+    --pulse-color: var(--warning-glow);
+    animation: glow-pulse 2s infinite;
+}
+
+.status-panel.connected .status-glow-dot {
+    background-color: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    --pulse-color: var(--success-glow);
+}
+
+.status-panel.disconnected .status-glow-dot {
+    background-color: var(--danger);
+    box-shadow: 0 0 8px var(--danger);
+    --pulse-color: var(--danger-glow);
+}
+
+@keyframes glow-pulse {
+    0% {
+        box-shadow: 0 0 0 0 var(--pulse-color);
+    }
+    70% {
+        box-shadow: 0 0 0 8px transparent;
+    }
+    100% {
+        box-shadow: 0 0 0 0 transparent;
+    }
+}
+
+/* Dashboard Layout Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 24px;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Cards (Glassmorphism) */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px) saturate(110%);
+    -webkit-backdrop-filter: blur(16px) saturate(110%);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, hsla(0, 0%, 100%, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-header h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: hsl(0, 0%, 95%);
+    letter-spacing: 0.5px;
+}
+
+.icon-accent {
+    width: 20px;
+    height: 20px;
+    color: var(--accent-blue);
+    filter: drop-shadow(0 0 6px var(--accent-blue-glow));
+}
+
+/* Webcam Card Specifics */
+.camera-feed-card {
+    padding-bottom: 20px;
+}
+
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: hsla(215, 100%, 60%, 0.15);
+    border: 1px solid hsla(215, 100%, 60%, 0.3);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    letter-spacing: 0.5px;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent-blue);
+    animation: glow-pulse 1.5s infinite;
+    --pulse-color: var(--accent-blue-glow);
+}
+
+.webcam-viewport {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: hsl(222, 20%, 3%);
+    border-radius: 12px;
+    border: 1px dashed hsla(0, 0%, 100%, 0.1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scanline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to bottom, hsla(215, 100%, 60%, 0.35), transparent);
+    animation: scan 6s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes scan {
+    0% { top: 0%; }
+    100% { top: 100%; }
+}
+
+.viewport-overlay {
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 2;
+}
+
+.viewport-placeholder-icon {
+    width: 48px;
+    height: 48px;
+    color: hsla(0, 0%, 100%, 0.25);
+    margin-bottom: 8px;
+}
+
+.viewport-placeholder-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: hsl(0, 0%, 80%);
+}
+
+.viewport-subtext {
+    font-size: 0.75rem;
+    color: hsl(222, 10%, 55%);
+}
+
+/* Chart Container & Styling */
+.chart-card {
+    flex-grow: 1;
+}
+
+.chart-container {
+    width: 100%;
+    position: relative;
+}
+
+/* Stats Box Grid */
+.stats-card {
+    background: linear-gradient(180deg, var(--card-bg), hsla(222, 20%, 8%, 0.55));
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.stat-box {
+    background: hsla(0, 0%, 100%, 0.02);
+    border: 1px solid hsla(0, 0%, 100%, 0.04);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.stat-box.main-stat {
+    grid-column: 1 / -1;
+    background: hsla(215, 100%, 50%, 0.03);
+    border: 1px solid hsla(215, 100%, 50%, 0.15);
+    padding: 24px 16px;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: hsl(222, 10%, 60%);
+}
+
+.stat-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: hsl(0, 0%, 95%);
+}
+
+.stat-value.focus-value {
+    font-size: 3rem;
+    font-weight: 850;
+    letter-spacing: -1px;
+}
+
+.mono {
+    font-family: var(--font-mono);
+}
+
+/* Focus Value Color Coding with Text Glows */
+.focus-value.green {
+    color: var(--success);
+    text-shadow: 0 0 20px var(--success-glow);
+}
+
+.focus-value.orange {
+    color: var(--warning);
+    text-shadow: 0 0 20px var(--warning-glow);
+}
+
+.focus-value.red {
+    color: var(--danger);
+    text-shadow: 0 0 20px var(--danger-glow);
+}
+
+/* Simulation Controls */
+.simulation-card {
+    border: 1px dashed hsla(215, 100%, 60%, 0.2);
+}
+
+.card-description {
+    font-size: 0.85rem;
+    color: hsl(222, 10%, 65%);
+    margin-bottom: 18px;
+    line-height: 1.45;
+}
+
+.sim-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-success {
+    background-color: hsla(145, 80%, 40%, 0.2);
+    border: 1px solid hsla(145, 80%, 40%, 0.4);
+    color: hsl(145, 85%, 65%);
+}
+
+.btn-success:hover {
+    background-color: hsla(145, 80%, 40%, 0.35);
+    border-color: var(--success);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px hsla(145, 80%, 40%, 0.25);
+}
+
+.btn-danger {
+    background-color: hsla(355, 80%, 40%, 0.2);
+    border: 1px solid hsla(355, 80%, 40%, 0.4);
+    color: hsl(355, 85%, 70%);
+}
+
+.btn-danger:hover {
+    background-color: hsla(355, 80%, 40%, 0.35);
+    border-color: var(--danger);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px hsla(355, 80%, 40%, 0.25);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.sim-status-message {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: hsl(222, 10%, 55%);
+    background: hsla(0, 0%, 100%, 0.02);
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid hsla(0, 0%, 100%, 0.04);
+}
+
+/* Log Card Viewport & Items */
+.log-card {
+    flex-grow: 1;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: hsl(222, 10%, 55%);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.btn-text:hover {
+    color: var(--accent-blue);
+}
+
+.log-viewport {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 4px;
+    scrollbar-color: hsla(0, 0%, 100%, 0.1) transparent;
+    scrollbar-width: thin;
+}
+
+/* Custom Scrollbars fallback for Webkit */
+@supports not (scrollbar-color: auto) {
+    .log-viewport::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    .log-viewport::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 100%, 0.1);
+        border-radius: 4px;
+    }
+    
+    .log-viewport::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}
+
+#log-list {
+    list-style: none;
+}
+
+#log-list li {
+    padding: 8px 12px;
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.04);
+    font-size: 0.8rem;
+    color: hsl(0, 0%, 75%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    animation: slideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background: hsla(0, 0%, 100%, 0.01);
+    margin-bottom: 4px;
+    border-radius: 4px;
+}
+
+#log-list li.focus-log {
+    border-left-color: var(--success);
+}
+
+#log-list li.distract-log {
+    border-left-color: var(--danger);
+}
+
+#log-list li:hover {
+    background: hsla(0, 0%, 100%, 0.03);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .container {
+        padding: 20px 12px;
+    }
+    
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .status-panel {
+        align-self: flex-start;
+    }
+}

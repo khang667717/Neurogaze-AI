@@ -1,0 +1,24 @@
+# Môi trường ảo Python
+venv/
+.venv/
+env/
+
+# Files cache và bytecode của Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Database & Logs
+*.db
+*.sqlite3
+logs/
+*.log
+
+# Cấu hình môi trường (ẩn)
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db

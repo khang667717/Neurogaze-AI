@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRVAS - Personal Focus Monitor</title>
+    <!-- Google Fonts: Outfit and JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1.2">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="background-overlay"></div>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <div class="logo-icon"><i data-lucide="shield-alert"></i></div>
+                <div class="title-meta">
+                    <h1>SRVAS</h1>
+                    <p class="subtitle">Smart Real-time Vigilance & Attention System</p>
+                </div>
+            </div>
+            <div class="status-panel">
+                <div id="status-glow" class="status-glow-dot"></div>
+                <span id="status">Connecting to Backend...</span>
+            </div>
+        </header>
+
+        <main class="dashboard-grid">
+            <!-- Left Column: Webcam & Chart -->
+            <div class="left-column">
+                <!-- Webcam Card -->
+                <div class="card camera-feed-card">
+                    <div class="card-header">
+                        <div class="header-title-group">
+                            <i data-lucide="video" class="icon-accent"></i>
+                            <h2>Webcam Live Stream</h2>
+                        </div>
+                        <span class="live-badge"><span class="pulse-dot"></span>EXTERNAL CV</span>
+                    </div>
+                    <div class="webcam-viewport">
+                        <div class="scanline"></div>
+                        <img id="webcam-stream" src="" alt="Webcam Feed"
+                            style="width: 100%; height: 100%; object-fit: cover; display: none;" />
+                        <div id="webcam-placeholder" class="viewport-overlay">
+                            <i data-lucide="camera-off" class="viewport-placeholder-icon"></i>
+                            <p class="viewport-placeholder-text">Camera Feed Managed by Background CV Thread</p>
+                            <div id="stream-debug"
+                                style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 6px; font-size: 0.85em; text-align: center; max-width: 90%; border: 1px solid rgba(255,255,255,0.05);">
+                                <strong>Stream Debug Info</strong><br>
+                                Status: <span id="debug-status" style="color: var(--warning);">Waiting for CV
+                                    Module...</span><br>
+                                Frames Received: <span id="debug-frames" class="mono">0</span> | Errors: <span
+                                    id="debug-errors" class="mono" style="color: var(--danger);">0</span><br>
+                                <span id="debug-message"
+                                    style="display: block; margin-top: 5px; font-size: 0.9em; font-style: italic;">Run
+                                    cv/main.py or use the simulator below</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Nút điều khiển START / STOP -->
+                    <div class="camera-controls"
+                        style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                        <button id="btn-start-camera" class="btn btn-success"
+                            style="background: rgba(0,255,0,0.15); border-color: #00ff00;">
+                            <i data-lucide="play"></i> START
+                        </button>
+                        <button id="btn-stop-camera" class="btn btn-danger"
+                            style="background: rgba(255,0,0,0.15); border-color: #ff0000;">
+                            <i data-lucide="square"></i> STOP
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chart Card -->
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div class="header-title-group">
+                            <i data-lucide="trending-up" class="icon-accent"></i>
+                            <h2>Focus Score Trend</h2>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="focusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Stats & Simulation & Logs -->
+            <div class="right-column">
+                <!-- Current Stats Card -->
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <div class="header-title-group">
+                            <i data-lucide="activity" class="icon-accent"></i>
+                            <h2>Telemetry & Stats</h2>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-label">Session ID</span>
+                            <span id="session-id" class="stat-value mono">N/A</span>
+                        </div>
+                        <div class="stat-box main-stat">
+                            <span class="stat-label">Focus Score</span>
+                            <span id="focus-score" class="stat-value focus-value green">0%</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Active Ratio</span>
+                            <span id="active-ratio" class="stat-value mono">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Controls Card -->
+                <div class="card simulation-card">
+                    <div class="card-header">
+                        <div class="header-title-group">
+                            <i data-lucide="sliders" class="icon-accent"></i>
+                            <h2>CV Simulation Deck</h2>
+                        </div>
+                    </div>
+                    <p class="card-description">No camera? Manually inject synthetic event frames to test the FastAPI
+                        aggregator and websocket.</p>
+                    <div class="sim-buttons">
+                        <button id="btn-sim-focus" class="btn btn-success">
+                            <i data-lucide="user-check"></i>
+                            <span>Simulate Focus</span>
+                        </button>
+                        <button id="btn-sim-distract" class="btn btn-danger">
+                            <i data-lucide="user-x"></i>
+                            <span>Simulate Distracted</span>
+                        </button>
+                    </div>
+                    <div id="sim-status" class="sim-status-message">Ready to inject events</div>
+                </div>
+
+                <!-- Event Logs Card -->
+                <div class="card log-card">
+                    <div class="card-header">
+                        <div class="header-title-group">
+                            <i data-lucide="terminal" class="icon-accent"></i>
+                            <h2>System Event Logs</h2>
+                        </div>
+                        <button id="btn-clear-logs" class="btn-text">Clear</button>
+                    </div>
+                    <div class="log-viewport">
+                        <ul id="log-list" class="mono">
+                            <!-- Real-time logs will prepend here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="app.js?v=1.4"></script>
+</body>
+
+</html>
